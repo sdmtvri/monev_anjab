@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuesioner Data Pegawai Operasional - SDM TVRI</title>
+  <meta name="description"
+    content="Formulir Kuesioner Data Pegawai Operasional SDM TVRI 2026 yang terintegrasi langsung dengan Google Sheets.">
+
+  <!-- Favicon using official TVRI Logo (no stretching) -->
+  <link rel="icon" type="image/png" href="assets/logotvri.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body oncontextmenu="return false;">
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <div class="card-wrapper">
+
+      <!-- Outer Header (Image, Title, and Description Outside the Card) -->
+      <header class="page-header">
+        <div class="logo-container">
+          <img src="assets/logotvri.png" alt="Logo TVRI" class="header-logo" draggable="false">
+        </div>
+        <h1 class="page-title">Kuesioner Data Pegawai Operasional</h1>
+        <p class="page-desc">Silakan lengkapi data diri dan uraian tugas anda di bawah ini dengan informasi yang valid.
+        </p>
+      </header>
+
+      <!-- White Questionnaire Card (Starts directly from the columns) -->
+      <section class="questionnaire-card">
+
+        <!-- Success Alert Message (Shown after data is sent) -->
+        <div id="successAlert" class="success-alert hidden">
+          <div class="success-alert-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="success-alert-content">
+            <h3 class="success-alert-title">Terima kasih, Data Berhasil dikirim!</h3>
+            <p class="success-alert-desc">Data kuesioner Anda telah berhasil direkam ke Google Sheets SDM TVRI.</p>
+          </div>
+          <button type="button" id="btnCloseSuccessAlert" class="btn-close-alert" aria-label="Tutup pesan">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Form Element -->
+        <form id="employeeForm" class="form-body" novalidate>
+
+          <!-- Row 1: Nama & NIP -->
+          <div class="form-grid-2">
+            <!-- Nama -->
+            <div class="form-group">
+              <label for="nama" class="form-label">
+                Nama Lengkap <span class="required-star">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input type="text" id="nama" name="nama" class="form-control"
+                  placeholder="Masukkan nama lengkap sesuai SK" required autocomplete="name">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-nama"></span>
+            </div>
+
+            <!-- NIP -->
+            <div class="form-group">
+              <label for="nip" class="form-label">
+                NIP <span class="required-star">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input type="text" id="nip" name="nip" class="form-control" placeholder="Contoh: 198501012010121001"
+                  required minlength="18" maxlength="18" pattern="\d{18}" inputmode="numeric">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                    <line x1="7" y1="8" x2="17" y2="8"></line>
+                    <line x1="7" y1="12" x2="13" y2="12"></line>
+                    <line x1="7" y1="16" x2="10" y2="16"></line>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-nip"></span>
+            </div>
+          </div>
+
+          <!-- Row 2: Status, Satuan Kerja, Bagian -->
+          <div class="form-grid-3">
+            <!-- Status -->
+            <div class="form-group">
+              <label for="status" class="form-label">
+                Status <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="status" name="status" class="form-control form-select" required>
+                  <option value="" disabled selected>Pilih Status...</option>
+                  <option value="PNS">PNS</option>
+                  <option value="PPPK">PPPK</option>
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-status"></span>
+            </div>
+
+            <!-- Satuan Kerja (Satker) -->
+            <div class="form-group">
+              <label for="satuanKerja" class="form-label">
+                Satuan Kerja <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="satuanKerja" name="satuanKerja" class="form-control form-select" required>
+                  <option value="" disabled selected>Pilih Satuan Kerja...</option>
+                  <option value="Direktorat Keuangan">Direktorat Keuangan</option>
+                  <option value="Direktorat Pengembangan dan Usaha">Direktorat Pengembangan dan Usaha</option>
+                  <option value="Direktorat Program dan Berita">Direktorat Program dan Berita</option>
+                  <option value="Direktorat Teknik">Direktorat Teknik</option>
+                  <option value="Direktorat Umum">Direktorat Umum</option>
+                  <option value="Pusat Data dan Strategi">Pusat Data dan Strategi</option>
+                  <option value="Pusat Pendidikan dan Pelatihan">Pusat Pendidikan dan Pelatihan</option>
+                  <option value="Satuan Pengawasan Intern">Satuan Pengawasan Intern</option>
+                  <option value="TVRI Stasiun Aceh">TVRI Stasiun Aceh</option>
+                  <option value="TVRI Stasiun Bali">TVRI Stasiun Bali</option>
+                  <option value="TVRI Stasiun Bangka Belitung">TVRI Stasiun Bangka Belitung</option>
+                  <option value="TVRI Stasiun Banten">TVRI Stasiun Banten</option>
+                  <option value="TVRI Stasiun Bengkulu">TVRI Stasiun Bengkulu</option>
+                  <option value="TVRI Stasiun D.I. Yogyakarta">TVRI Stasiun D.I. Yogyakarta</option>
+                  <option value="TVRI Stasiun DKI Jakarta">TVRI Stasiun DKI Jakarta</option>
+                  <option value="TVRI Stasiun Gorontalo">TVRI Stasiun Gorontalo</option>
+                  <option value="TVRI Stasiun Jambi">TVRI Stasiun Jambi</option>
+                  <option value="TVRI Stasiun Jawa Barat">TVRI Stasiun Jawa Barat</option>
+                  <option value="TVRI Stasiun Jawa Tengah">TVRI Stasiun Jawa Tengah</option>
+                  <option value="TVRI Stasiun Jawa Timur">TVRI Stasiun Jawa Timur</option>
+                  <option value="TVRI Stasiun Kalimantan Barat">TVRI Stasiun Kalimantan Barat</option>
+                  <option value="TVRI Stasiun Kalimantan Selatan">TVRI Stasiun Kalimantan Selatan</option>
+                  <option value="TVRI Stasiun Kalimantan Tengah">TVRI Stasiun Kalimantan Tengah</option>
+                  <option value="TVRI Stasiun Kalimantan Timur">TVRI Stasiun Kalimantan Timur</option>
+                  <option value="TVRI Stasiun Kalimantan Utara">TVRI Stasiun Kalimantan Utara</option>
+                  <option value="TVRI Stasiun Kepulauan Riau">TVRI Stasiun Kepulauan Riau</option>
+                  <option value="TVRI Stasiun Lampung">TVRI Stasiun Lampung</option>
+                  <option value="TVRI Stasiun Maluku">TVRI Stasiun Maluku</option>
+                  <option value="TVRI Stasiun Maluku Utara">TVRI Stasiun Maluku Utara</option>
+                  <option value="TVRI Stasiun NTB">TVRI Stasiun NTB</option>
+                  <option value="TVRI Stasiun NTT">TVRI Stasiun NTT</option>
+                  <option value="TVRI Stasiun Papua">TVRI Stasiun Papua</option>
+                  <option value="TVRI Stasiun Papua Barat">TVRI Stasiun Papua Barat</option>
+                  <option value="TVRI Stasiun Riau">TVRI Stasiun Riau</option>
+                  <option value="TVRI Stasiun Sulawesi Barat">TVRI Stasiun Sulawesi Barat</option>
+                  <option value="TVRI Stasiun Sulawesi Selatan">TVRI Stasiun Sulawesi Selatan</option>
+                  <option value="TVRI Stasiun Sulawesi Tengah">TVRI Stasiun Sulawesi Tengah</option>
+                  <option value="TVRI Stasiun Sulawesi Tenggara">TVRI Stasiun Sulawesi Tenggara</option>
+                  <option value="TVRI Stasiun Sulawesi Utara">TVRI Stasiun Sulawesi Utara</option>
+                  <option value="TVRI Stasiun Sumatera Barat">TVRI Stasiun Sumatera Barat</option>
+                  <option value="TVRI Stasiun Sumatera Selatan">TVRI Stasiun Sumatera Selatan</option>
+                  <option value="TVRI Stasiun Sumatera Utara">TVRI Stasiun Sumatera Utara</option>
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-satuanKerja"></span>
+            </div>
+
+            <!-- Bagian -->
+            <div class="form-group">
+              <label for="bagian" class="form-label">
+                Bagian <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="bagian" name="bagian" class="form-control form-select" required>
+                  <option value="" disabled selected>Pilih Bagian...</option>
+                  <option value="Tata Usaha dan Sekretariat">Tata Usaha dan Sekretariat</option>
+                  <option value="Umum">Umum</option>
+                  <option value="SDM">SDM</option>
+                  <option value="Pengembangan dan Usaha">Pengembangan dan Usaha</option>
+                  <option value="Keuangan">Keuangan</option>
+                  <option value="Program">Program</option>
+                  <option value="Berita">Berita</option>
+                  <option value="Teknik">Teknik</option>
+                  <option value="Transmisi">Transmisi</option>
+                  <option value="Media Baru">Media Baru</option>
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-bagian"></span>
+            </div>
+          </div>
+
+          <!-- Row 3: Jenis Jabatan, Jabatan, Jenjang Jabatan -->
+          <div class="form-grid-3">
+            <!-- Jenis Jabatan (Jenis) -->
+            <div class="form-group">
+              <label for="jenisJabatan" class="form-label">
+                Jenis Jabatan <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="jenisJabatan" name="jenisJabatan" class="form-control form-select" required>
+                  <option value="" disabled selected>Pilih Jenis Jabatan...</option>
+                  <option value="Fungsional">Fungsional</option>
+                  <option value="Pelaksana">Pelaksana</option>
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-jenisJabatan"></span>
+            </div>
+
+            <!-- Jabatan (Conditional) -->
+            <div class="form-group">
+              <label for="jabatan" class="form-label">
+                Jabatan <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="jabatan" name="jabatan" class="form-control form-select" required disabled>
+                  <option value="" disabled selected>Pilih Jabatan...</option>
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-jabatan"></span>
+            </div>
+
+            <!-- Jenjang Jabatan (Conditional) -->
+            <div class="form-group">
+              <label for="jenjangJabatan" class="form-label">
+                Jenjang Jabatan <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="jenjangJabatan" name="jenjangJabatan" class="form-control form-select" required disabled>
+                  <option value="" disabled selected>Pilih Jenjang Jabatan...</option>
+                </select>
+                <span class="select-chevron">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <span class="field-error" id="error-jenjangJabatan"></span>
+            </div>
+          </div>
+
+          <!-- Contoh Pengisian Uraian Tugas -->
+          <div class="example-guide-box">
+            <div class="example-guide-header">
+              <div class="example-guide-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="example-guide-title-group">
+                <h4 class="example-guide-title">Contoh Pengisian Uraian Tugas</h4>
+                <p class="example-guide-subtitle">Berikut adalah referensi contoh pengisian uraian tugas yang dapat Anda
+                  gunakan sebagai acuan:</p>
+              </div>
+            </div>
+            <ol class="example-guide-list">
+              <li>
+                <span class="example-item-num">1</span>
+                <span class="example-item-text">Mengupdate data pegawai PNS LPP TVRI Kantor Pusat dan Membuat DPP
+                  (Daftar Perubahan Pegawai) Gaji PNS LPP TVRI Kantor Pusat melalui Aplikasi Web Gaji Kemenkeu</span>
+              </li>
+              <li>
+                <span class="example-item-num">2</span>
+                <span class="example-item-text">Membuat SPP dan SPM Gaji PNS LPP TVRI Kantor Pusat pada Aplikasi Sakti
+                  Kemenkeu setiap Bulan.</span>
+              </li>
+              <li>
+                <span class="example-item-num">3</span>
+                <span class="example-item-text">Membuat perhitungan Penghasilan Dewan Direksi dan Dewan Pengawas LPP
+                  TVRI.</span>
+              </li>
+              <li>
+                <span class="example-item-num">4</span>
+                <span class="example-item-text">Membuat SPP dan SPM Penghasilan Dewan Direksi dan Dewan Pengawas LPP
+                  TVRI setiap bulan.</span>
+              </li>
+              <li>
+                <span class="example-item-num">5</span>
+                <span class="example-item-text">Memonitoring hasil SP2D (Surat Perintah Pencairan Dana) pada website
+                  OMSPAN Kemenkeu (Sekarang Myintress Kemenkeu).</span>
+              </li>
+              <li>
+                <span class="example-item-num">6</span>
+                <span class="example-item-text">Membuat SKPP (Surat keterangan Penghentian Pembayaran) Pegawai PNS
+                  Pensiun, Mutasi dan Meninggal pada Aplikasi Web Gaji kemenkeu.</span>
+              </li>
+              <li>
+                <span class="example-item-num">7</span>
+                <span class="example-item-text">Membuat Billing Simponi Pengembalian Pegawai belanja pegawai (contoh
+                  apabila ada TGR).</span>
+              </li>
+              <li>
+                <span class="example-item-num">8</span>
+                <span class="example-item-text">Membuat SPP dan SPM Uang Lembur PNS LPP TVRI Kantor pusat pada Aplikasi
+                  Sakti Kemenkeu.</span>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Row 4: Uraian Tugas (Uraian) -->
+          <div class="form-group">
+            <div class="label-with-counter">
+              <label for="uraianTugas" class="form-label">
+                Uraian Tugas <span class="required-star">*</span>
+              </label>
+              <span id="charCount" class="char-counter">0 karakter</span>
+            </div>
+            <div class="textarea-wrapper">
+              <textarea id="uraianTugas" name="uraianTugas" class="form-control form-textarea" rows="5"
+                placeholder="Sebutkan tugas dan tanggung jawab anda" required></textarea>
+            </div>
+            <span class="field-error" id="error-uraianTugas"></span>
+          </div>
+
+          <!-- Submission Actions -->
+          <div class="form-actions">
+            <button type="button" id="btnReset" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              <span>Hapus Form</span>
+            </button>
+            <button type="submit" id="btnSubmit" class="btn btn-primary">
+              <span class="btn-spinner hidden" id="submitSpinner"></span>
+              <svg class="btn-icon" id="submitIcon" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              <span id="submitText">Kirim</span>
+            </button>
+          </div>
+
+        </form>
+
+      </section>
+
+      <!-- Footer -->
+      <footer class="app-footer" id="appFooter">
+        <p class="footer-copyright">©SDM TVRI</p>
+        <p class="footer-year">2026</p>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- Toast Notification System -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
