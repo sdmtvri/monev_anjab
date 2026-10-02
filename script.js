@@ -5,7 +5,7 @@
  * Link: https://docs.google.com/spreadsheets/d/19rftSXE8R8sk9tDb2f4s6XOd9rJXUMmJkHYRI6Mssq4/edit
  * Google Apps Script Web App URL:
  * https://script.google.com/macros/s/AKfycbx2wBxPAjyfxUnExsxkYIYvBwHFHVoNXTpiC9ijz_jhVITryVk6OPEVMsPMGVDL4q52/exec
- * Kolom: Timestamp, Nama, NIP, Status, Satker, Bagian, Jenis, Jabatan, Jenjang, Uraian
+ * Kolom: Timestamp, Nama, NIP, Status, Satker, Bagian, Jenis, Jabatan, Jenjang, Penugasan, Uraian
  * ==========================================================================
  */
 
@@ -23,15 +23,19 @@ const JABATAN_FUNGSIONAL = [
   'Analis Kebijakan',
   'Analis Pengelolaan Keuangan APBN',
   'Analis SDM Aparatur',
+  'Apoteker',
   'Arsiparis',
   'Asesor SDM Aparatur',
   'Asisten Pranata Siaran',
   'Asisten Teknisi Siaran',
   'Auditor',
+  'Dokter',
+  'Dokter Gigi',
   'Penata Laksana Barang',
   'Pengembang Teknologi Pembelajaran',
   'Pengelola Pengadaan Barang/Jasa',
   'Perancang Peraturan Perundang-Undangan',
+  'Perawat',
   'Perencana',
   'Pranata Hubungan Masyarakat',
   'Pranata Komputer',
@@ -100,6 +104,7 @@ const bagianSelect = document.getElementById('bagian');
 const jenisJabatanSelect = document.getElementById('jenisJabatan');
 const jabatanSelect = document.getElementById('jabatan');
 const jenjangJabatanSelect = document.getElementById('jenjangJabatan');
+const penugasanSelect = document.getElementById('penugasan');
 const uraianTugasInput = document.getElementById('uraianTugas');
 const charCountSpan = document.getElementById('charCount');
 const toastContainer = document.getElementById('toastContainer');
@@ -176,7 +181,7 @@ function setupEventListeners() {
   });
 
   // Hapus error saat input diubah
-  [namaInput, nipInput, statusSelect, satuanKerjaSelect, bagianSelect, jenisJabatanSelect, jabatanSelect, jenjangJabatanSelect, uraianTugasInput].forEach(field => {
+  [namaInput, nipInput, statusSelect, satuanKerjaSelect, bagianSelect, jenisJabatanSelect, jabatanSelect, jenjangJabatanSelect, penugasanSelect, uraianTugasInput].forEach(field => {
     field.addEventListener('input', () => clearFieldError(field));
     field.addEventListener('change', () => clearFieldError(field));
   });
@@ -393,6 +398,13 @@ function validateForm() {
     if (!firstInvalid) firstInvalid = jenjangJabatanSelect;
   }
 
+  // Penugasan
+  if (!penugasanSelect.value) {
+    setFieldError(penugasanSelect, 'Silakan pilih Penugasan.');
+    isValid = false;
+    if (!firstInvalid) firstInvalid = penugasanSelect;
+  }
+
   // Uraian Tugas (Uraian)
   if (!uraianTugasInput.value.trim()) {
     setFieldError(uraianTugasInput, 'Uraian tugas dan tanggung jawab wajib diisi.');
@@ -434,8 +446,9 @@ async function handleFormSubmit(e) {
     second: '2-digit'
   }).replace(/\./g, ':');
 
-  // Struktur data langsung dikirim ke Kolom A - J Spreadsheet:
-  // Timestamp, Nama, NIP, Status, Satker, Bagian, Jenis, Jabatan, Jenjang, Uraian
+  // Struktur data langsung dikirim ke Kolom A - K Spreadsheet:
+  // Timestamp, Nama, NIP, Status, Satker, Bagian, Jenis, Jabatan, Jenjang, Penugasan, Uraian
+  const isPelaksana = jenisJabatanSelect.value === 'Pelaksana';
   const payload = {
     Timestamp: formattedTimestamp,
     Nama: namaInput.value.trim(),
@@ -446,6 +459,7 @@ async function handleFormSubmit(e) {
     Jenis: jenisJabatanSelect.value,
     Jabatan: jabatanSelect.value,
     Jenjang: isPelaksana ? '-' : (jenjangJabatanSelect.value || '-'),
+    Penugasan: penugasanSelect.value,
     Uraian: uraianTugasInput.value.trim()
   };
 
@@ -512,7 +526,7 @@ function handleFormReset() {
   charCountSpan.textContent = '0 karakter';
   updateConditionalDropdowns();
 
-  [namaInput, nipInput, statusSelect, satuanKerjaSelect, bagianSelect, jenisJabatanSelect, jabatanSelect, jenjangJabatanSelect, uraianTugasInput].forEach(field => {
+  [namaInput, nipInput, statusSelect, satuanKerjaSelect, bagianSelect, jenisJabatanSelect, jabatanSelect, jenjangJabatanSelect, penugasanSelect, uraianTugasInput].forEach(field => {
     clearFieldError(field);
   });
 }
@@ -524,7 +538,7 @@ function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
 
-  const iconSvg = type === 'success' 
+  const iconSvg = type === 'success'
     ? '<svg class="toast-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>'
     : '<svg class="toast-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#f43f5e" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
 
